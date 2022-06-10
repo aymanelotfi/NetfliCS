@@ -1,0 +1,2 @@
+# NetfliCS
+Movie recommender frontend
