@@ -1,0 +1,133 @@
+<template>
+  <div class="text-base text-white mb-3 lg:mb-5 font-semibold">Rate this movie</div>
+  <div class="rating">
+    <input
+      type="radio"
+      name="rating"
+      id="rating-5"
+      v-on:click="sendRating(5)"
+      :checked="$root.movi.score === 5"
+    />
+    <label for="rating-5"></label>
+    <input
+      type="radio"
+      name="rating"
+      id="rating-4"
+      v-on:click="sendRating(4)"
+      :checked="$root.movi.score === 4"
+    />
+    <label for="rating-4"></label>
+    <input
+      type="radio"
+      name="rating"
+      id="rating-3"
+      v-on:click="sendRating(3)"
+      :checked="$root.movi.score === 3"
+    />
+    <label for="rating-3"></label>
+    <input
+      type="radio"
+      name="rating"
+      id="rating-2"
+      v-on:click="sendRating(2)"
+      :checked="$root.movi.score === 2"
+    />
+    <label for="rating-2"></label>
+    <input
+      type="radio"
+      name="rating"
+      id="rating-1"
+      v-on:click="sendRating(1)"
+      :checked="$root.movi.score === 1"
+    />
+    <label for="rating-1"></label>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  name: "Rating",
+  data: function () {
+    return {
+      score: 0,
+    };
+  },
+  methods: {
+    sendRating: function (score) {
+      this.score = score;
+      console.log(this.$root.hm);
+      this.$root.hm.set(this.$root.movi._id,this.score);
+      axios
+        .put("http://localhost:3000/movies/"+this.$root.movi._id, {
+          title: this.$root.movi.title,
+          date: this.$root.movi.date,
+          genre_ids: this.$root.movi.genre_ids,
+          adult:this.$root.movi.adult,
+          viewers:[],
+          score: score,
+        })
+        .then((res) => {
+            console.log(res);
+          if (res.status === 201) {
+            this.score = res.data.score;
+          } else {
+            console.log(res);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  }
+  // created: function () {
+  //   axios
+  //     .get(`${process.env.VUE_APP_BACKEND_BASE_URL}/movies/rate`, {
+  //       params: { user: this.$root.currentUserEmail, movie: this.movieId },
+  //     })
+  //     .then((response) => {
+  //       this.rate = response.data.rate;
+  //       console.log(this.rate);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // },
+};
+</script>
+
+<style scoped>
+.rating {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  flex-direction: row-reverse;
+}
+
+.rating > input {
+  display: none;
+}
+
+.rating > label {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  margin-top: auto;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23e3e3e3' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 76%;
+  transition: 0.3s;
+}
+
+.rating > input:checked ~ label,
+.rating > input:checked ~ label ~ label {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23fcd93a' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+}
+
+.rating > input:not(:checked) ~ label:hover,
+.rating > input:not(:checked) ~ label:hover ~ label {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23d8b11e' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+}
+</style>
