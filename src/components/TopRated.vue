@@ -47,7 +47,6 @@ export default {
         // Do something if call succeeded
         console.log(response);
         this.moviesData = response.data.slice(0,100);
-        console.log("ok");
       })
       .catch((error) => {
         // Do something if call failed

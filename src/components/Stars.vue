@@ -57,7 +57,6 @@ export default {
   methods: {
     sendRating: function (score) {
       this.score = score;
-      console.log(this.$root.hm);
       this.$root.hm.set(this.$root.movi._id,this.score);
       axios
         .put("http://localhost:3000/movies/"+this.$root.movi._id, {
